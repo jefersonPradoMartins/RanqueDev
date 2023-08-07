@@ -1,0 +1,1 @@
+https://localhost:7192/api/User/ConfirmEmailAddress?token=CfDJ8AAAAAAAAAAAAAAAAAAAAABqg5OEszw%2B66p4jrz43%2B1CtBJe3TcwkRlxLDzOXAJndMGK32qFi0QcytaXjxjQf%2FKuawMxQ3MRUDqnCLV4LpYTMSh%2FSD5uWG4XJbdZVpHHXRaoBUomU0pHp7nCE9MjyEezyypdnR0qHSI%3D&email=jeferson.prado.martins12@gmail.com
