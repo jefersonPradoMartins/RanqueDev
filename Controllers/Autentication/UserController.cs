@@ -45,7 +45,7 @@ namespace RanqueDev.Api.Controllers.Autentication
         // GET: api/User/5
         [HttpPost("Login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(UserLoginDto userLogin)
+        public async Task<IActionResult> Login([FromBody] UserLoginDto userLogin)
         {
             try
             {
