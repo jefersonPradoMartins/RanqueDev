@@ -26,12 +26,14 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
+
+
 builder.Services.AddEndpointsApiExplorer();
 
 #region Swagger
 builder.Services.AddSwaggerGen(sg =>
     {
-        sg.SwaggerDoc("v1", new OpenApiInfo{ Title = "RanqueDev", Version = "v1" });
+        sg.SwaggerDoc("v1", new OpenApiInfo { Title = "RanqueDev", Version = "v1" });
 
         sg.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
         {
@@ -133,7 +135,7 @@ builder.Services.AddTransient<IQuestaoRepository, QuestaoRepository>();
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
 builder.Services.Configure<DataProtectionTokenProviderOptions>(
-    options=>options.TokenLifespan = TimeSpan.FromHours(2));
+    options => options.TokenLifespan = TimeSpan.FromHours(2));
 builder.Services.AddDataProtection().UseEphemeralDataProtectionProvider();
 
 

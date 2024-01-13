@@ -8,8 +8,9 @@ namespace RanqueDev.Api.Configurations
 {
     public class MapperConfig : Profile
     {
-        public MapperConfig() {
-            CreateMap<Questao, CreateQuestao>().ReverseMap(); 
+        public MapperConfig()
+        {
+            CreateMap<Questao, CreateQuestao>().ReverseMap();
             CreateMap<Tag, CreateTagDto>().ReverseMap();
 
             CreateMap<User, UserDto>().ReverseMap();
@@ -18,3 +19,6 @@ namespace RanqueDev.Api.Configurations
         }
     }
 }
+
+
+

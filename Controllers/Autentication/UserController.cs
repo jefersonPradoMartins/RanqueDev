@@ -34,7 +34,6 @@ namespace RanqueDev.Api.Controllers.Autentication
             _tokenService = tokenService;
         }
 
-        // GET: api/User
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Get()
@@ -42,7 +41,6 @@ namespace RanqueDev.Api.Controllers.Autentication
             return Ok(new UserDto());
         }
 
-        // GET: api/User/5
         [HttpPost("Login")]
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] UserLoginDto userLogin)
@@ -92,36 +90,36 @@ namespace RanqueDev.Api.Controllers.Autentication
         [AllowAnonymous]
         public async Task<IActionResult> Register(UserDto userDto)
         {
-              var  user = new User
-                {
-                    UserName = userDto.UserName,
-                    Email = userDto.Email,
-                    CodigoOrganizacao = 1
-                };
+            var user = new User
+            {
+                UserName = userDto.UserName,
+                Email = userDto.Email,
+                CodigoOrganizacao = 1
+            };
 
-                var result = await _userManager.CreateAsync(
-                    user, userDto.Password);
+            var result = await _userManager.CreateAsync(
+                user, userDto.Password);
 
-                if (result.Succeeded)
-                {
-                    await SendTokenConfirmationAsync(user);
-                    return Ok();
-                }
-                else
-                {
+            if (result.Succeeded)
+            {
+                await SendTokenConfirmationAsync(user);
+                return Ok();
+            }
+            else
+            {
                 var erroList = new List<string>();
                 foreach (var erro in result.Errors)
                 {
-                    erroList.Add(erro.Code + " , "+ erro.Description);
+                    erroList.Add(erro.Code + " , " + erro.Description);
                 }
-                    var problemDetails = new CustomProblemDetails( status:
-                        System.Net.HttpStatusCode.BadRequest
-                        , request: Request
-                        , errors: erroList);
+                var problemDetails = new CustomProblemDetails(status:
+                    System.Net.HttpStatusCode.BadRequest
+                    , request: Request
+                    , errors: erroList);
 
-                    return BadRequest(problemDetails);
-                }
-           
+                return BadRequest(problemDetails);
+            }
+
         }
 
         [HttpGet("TokenConfirmation")]
