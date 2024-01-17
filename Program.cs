@@ -1,22 +1,24 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.DataProtection;
 using RanqueDev.Api.Configurations;
 using RanqueDev.Infra.Context;
 using RanqueDev.Infra.Repositories;
 using RanqueDev.Data.EFCore.UoW;
 using RanqueDev.Domain.Entities.Identity;
-using System.Text.Json.Serialization;
-using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.AspNetCore.DataProtection;
 using RanqueDev.Infra.Interfaces.Repository;
 using RanqueDev.Infra.Interfaces;
 using RanqueDev.Api.Token;
 using RanqueDev.Api.Extensions;
 using Hellang.Middleware.ProblemDetails;
+using System.Text.Json.Serialization;
+using System.Text;
+using Serilog;
+
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -26,6 +28,10 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
+
+
+builder.Host.UseSerilog((context, LoggerConfig)
+    => LoggerConfig.ReadFrom.Configuration(context.Configuration));
 
 
 builder.Services.AddEndpointsApiExplorer();
@@ -87,9 +93,6 @@ builder.Services.AddIdentityCore<User>(options =>
     options.Password.RequiredLength = 4;
     options.User.RequireUniqueEmail = true;
     options.SignIn.RequireConfirmedEmail = true;
-
-
-
     options.Lockout.MaxFailedAccessAttempts = 3;
     options.Lockout.AllowedForNewUsers = true;
 }).AddRoles<Role>()
@@ -100,6 +103,7 @@ builder.Services.AddIdentityCore<User>(options =>
             .AddDefaultTokenProviders();
 #endregion
 #region Authentication
+
 builder.Services.AddAuthentication(
     JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
@@ -114,6 +118,8 @@ builder.Services.AddAuthentication(
                         };
                     }
 );
+
+
 builder.Services.AddMvc(o =>
 {
     var policy = new AuthorizationPolicyBuilder()
@@ -121,7 +127,9 @@ builder.Services.AddMvc(o =>
     .Build();
     o.Filters.Add(new AuthorizeFilter(policy));
 }).AddNewtonsoftJson();
+
 #endregion
+
 #region Context
 builder.Services.AddDbContext<RanqueContext>();
 #endregion
@@ -129,9 +137,11 @@ builder.Services.AddDbContext<RanqueContext>();
 builder.Services.AddApiProblemDetails();
 #endregion
 
+
+
 builder.Services.AddTransient<ITagRepository, TagRepository>();
 builder.Services.AddTransient<ITokenService, TokenService>();
-builder.Services.AddTransient<IQuestaoRepository, QuestaoRepository>();
+builder.Services.AddTransient<IQuestionRepository, QuestionRepository>();
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
 builder.Services.Configure<DataProtectionTokenProviderOptions>(
@@ -147,6 +157,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+
+app.UseSerilogRequestLogging();
+
 app.UseRouting();
 app.UseAuthentication();
 app.UseHttpsRedirection();

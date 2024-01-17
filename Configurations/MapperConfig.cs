@@ -10,7 +10,7 @@ namespace RanqueDev.Api.Configurations
     {
         public MapperConfig()
         {
-            CreateMap<Questao, CreateQuestao>().ReverseMap();
+            CreateMap<Question, CreateQuestao>().ReverseMap();
             CreateMap<Tag, CreateTagDto>().ReverseMap();
 
             CreateMap<User, UserDto>().ReverseMap();

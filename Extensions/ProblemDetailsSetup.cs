@@ -13,14 +13,17 @@ namespace RanqueDev.Api.Extensions
                     var env = ctx.RequestServices.GetRequiredService<IHostEnvironment>();
                     return env.IsStaging() || env.IsDevelopment();
                 };
+
                 options.MapExceptionToStatusCodeWithMessage<UnauthorizedAccessException>(StatusCodes.Status401Unauthorized);
                 options.MapExceptionToStatusCodeWithMessage<ArgumentException>(StatusCodes.Status400BadRequest);
                 options.MapExceptionToStatusCodeWithMessage<ArgumentNullException>(StatusCodes.Status400BadRequest);
                 options.MapToStatusCode<NotImplementedException>(StatusCodes.Status501NotImplemented);
                 options.MapToStatusCode<HttpRequestException>(StatusCodes.Status503ServiceUnavailable);
                 options.MapToStatusCode<Exception>(StatusCodes.Status500InternalServerError);
+
             }).AddProblemDetailsConventions();
         }
+
         public static void MapExceptionToStatusCodeWithMessage<TException>(this ProblemDetailsOptions options, int statusCode) where TException : Exception
         {
             options.Map<TException>(ex => new StatusCodeProblemDetails(statusCode)

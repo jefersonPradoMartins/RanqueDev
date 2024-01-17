@@ -34,13 +34,6 @@ namespace RanqueDev.Api.Controllers.Autentication
             _tokenService = tokenService;
         }
 
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult Get()
-        {
-            return Ok(new UserDto());
-        }
-
         [HttpPost("Login")]
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] UserLoginDto userLogin)
@@ -85,7 +78,6 @@ namespace RanqueDev.Api.Controllers.Autentication
             }
         }
 
-        // POST: api/User
         [HttpPost("Register")]
         [AllowAnonymous]
         public async Task<IActionResult> Register(UserDto userDto)
@@ -94,7 +86,7 @@ namespace RanqueDev.Api.Controllers.Autentication
             {
                 UserName = userDto.UserName,
                 Email = userDto.Email,
-                CodigoOrganizacao = 1
+                OrganizationId = 1
             };
 
             var result = await _userManager.CreateAsync(
@@ -152,19 +144,6 @@ namespace RanqueDev.Api.Controllers.Autentication
             _ = smtp.EnviarEmail(para: user.Email, body: confirmEmailAdressURL);
         }
 
-
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-
-        }
-
         [HttpGet("ConfirmEmailAddress")]
         [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmailAddress(string token, string email)
@@ -184,9 +163,5 @@ namespace RanqueDev.Api.Controllers.Autentication
 
             return Ok();
         }
-
-
-
     }
-
 }

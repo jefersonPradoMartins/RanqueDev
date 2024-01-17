@@ -12,30 +12,30 @@ namespace RanqueDev.Api.Controllers
     [ApiController]
     public class QuestoesController : ControllerBase
     {
-        private readonly IQuestaoRepository _questaoRepository;
+        private readonly IQuestionRepository _questionRepository;
         private readonly IMapper _mapper;
-        public QuestoesController(IQuestaoRepository questaoRepository
-            , IMapper mapper) {
-        
-            _questaoRepository = questaoRepository;
+        public QuestoesController(IQuestionRepository questionRepository
+            , IMapper mapper)
+        {
+
+            _questionRepository = questionRepository;
             _mapper = mapper;
-        
+
         }
 
-        [HttpGet]
-        public async Task<IEnumerable<Questao>> BuscarQuestaoPorTag(string nomeTag)
+        [HttpGet("GetQuetionsByTagName")]
+        public async Task<IEnumerable<Question>> GetQuetionsByTagName(string nomeTag)
         {
-            return await _questaoRepository.BuscarQuestaoPorTag(nomeTag);
-            
+            return await _questionRepository.GetQuetionsByTagName(nomeTag);
+
         }
         [HttpPost]
-        public async Task<ActionResult<Questao>> CadastrarQuestao(CreateQuestao createQuestao)
+        public async Task<ActionResult<Question>> CadastrarQuestao(CreateQuestao createQuestion)
         {
-            var questao = _mapper.Map<Questao>(createQuestao);
-            await _questaoRepository.CadastrarQuestao(questao);
-            await _questaoRepository.CommitAsync();
+            var question = _mapper.Map<Question>(createQuestion);
+            await _questionRepository.CreateQuestion(question);
 
-            return questao;
+            return question;
         }
 
     }
