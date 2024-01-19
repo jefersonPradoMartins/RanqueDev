@@ -78,6 +78,32 @@ namespace RanqueDev.Api.Controllers.Autentication
             }
         }
 
+        public class teste
+        {
+            public string Id { get; set; }
+            public string Name { get; set; }
+            public string Email { get; set; }
+            public string Password { get; set; }
+
+
+        }
+
+
+
+        [HttpGet("teste")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Test()
+        {
+            var t = new teste();
+            t.Email = "teste";
+            t.Password = "password";
+            t.Name = "name";
+            t.Id = "id";
+
+
+            return Ok(t.ToString());
+        }
+
         [HttpPost("Register")]
         [AllowAnonymous]
         public async Task<IActionResult> Register(UserDto userDto)
@@ -111,7 +137,6 @@ namespace RanqueDev.Api.Controllers.Autentication
 
                 return BadRequest(problemDetails);
             }
-
         }
 
         [HttpGet("TokenConfirmation")]
